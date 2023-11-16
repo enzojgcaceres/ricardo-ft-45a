@@ -1,48 +1,40 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
-import Card from './components/Card.jsx';
-import Cards from './components/Cards.jsx';
-import Nav from './components/nav.jsx';
-import characters from './data.js';
-import SearchBar from './components/SearchBar.jsx';
+import Cards from './components/cards/Cards.jsx';
+import Nav from './components/nav/Nav.jsx';
+import axios from "axios";
+const URL = "https://rym2.up.railway.app/api/character";
+const API_KEY = "henrystaff"
+
 
 function App() {
 
    const [characters, setCharacters] = useState([]);
 
-   const onSearch = () => {
-
-   const example = {
-      id: 1,
-      name: 'Rick Sanchez',
-      status: 'Alive',
-      species: 'Human',
-      gender: 'Male',
-      origin: {
-         name:'Earth (C-137)',
-         url: 'https://rickandmortyapi.com/api/location/1',
-      },
-      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+   function onSearch(id) {
+      const characterId = characters.filter(
+         char => char.id === Number(id)
+      )
+      if(characterId.length) {
+         return alert(`${characterId[0].name} ya existe!`)
+      }
+      axios(`${URL}/${id}?key=${API_KEY}`).then(
+         ({ data }) => {
+            if (data.name) {
+               setCharacters([...characters, data]);
+            } else {
+               window.alert('¡El id debe ser un número entre 1 y 826!');
+            }
+         });
    }
-
-   setCharacters(prevCharacters => [...prevCharacters, example]);
-   };
-
+   const onClose = id => {
+      setCharacters(characters.filter(char => char.id !== Number(id)))
+   }
    return (
       <div className='App'>
-         <Nav />
-         <Cards characters={characters} />
-       {/*  <Card
-            id={Rick.id}
-            name={Rick.name}
-            status={Rick.status}
-            species={Rick.species}
-            gender={Rick.gender}
-            origin={Rick.origin.name}
-            image={Rick.image}
-            onClose={() => window.alert('Emulamos que se cierra la card')}
-   />*/}
-      <SearchBar onSearch={onSearch} />
+         <Nav onSearch={onSearch} />
+         <hr />
+         <Cards characters={characters} onClose={onClose} />
       </div>
    );
 }
