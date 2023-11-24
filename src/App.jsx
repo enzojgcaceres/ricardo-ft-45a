@@ -1,13 +1,23 @@
-import { useState } from 'react';
 import './App.css';
-import Cards from './components/cards/Cards.jsx';
-import Nav from './components/nav/Nav.jsx';
 import axios from "axios";
+import { useEffect, useState } from 'react';
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import About from './components/about/About.jsx';
+import Cards from './components/cards/Cards.jsx';
+import Detail from './components/detail/Detail.jsx';
+import Form from './components/form/Form.jsx';
+import Nav from './components/nav/Nav.jsx';
+import NotFound from './components/notfound/NotFound.jsx';
+
 const URL = "https://rym2.up.railway.app/api/character";
 const API_KEY = "henrystaff"
 
 
 function App() {
+
+
+   const navigate = useNavigate();
+   const location = useLocation();
 
    const [characters, setCharacters] = useState([]);
 
@@ -26,15 +36,64 @@ function App() {
                window.alert('¡El id debe ser un número entre 1 y 826!');
             }
          });
+         navigate("/home")
    }
    const onClose = id => {
       setCharacters(characters.filter(char => char.id !== Number(id)))
    }
+
+   //* login
+   const [access, setAccess] = useState(false);
+   const EMAIL = 'ejemplo@gmail.com';
+   const PASSWORD = '123456';
+
+   function login(userData){
+      if(userData.password === PASSWORD && userData.email === EMAIL){
+         setAccess(true);
+         navigate('/home');
+      } else {
+         alert("Credenciales incorrectas!")
+      }
+   }
+
+   function logout(){
+      setAccess(false)
+   }
+
+   useEffect(()=>{
+      //!loggeo auto
+      !access && navigate ('/home');
+      //!access && navigate('/');
+   }, [access]);
+
    return (
       <div className='App'>
-         <Nav onSearch={onSearch} />
+         {
+            location.pathname !== "/" ? <Nav onSearch={onSearch} logout={logout} /> : null
+         }
+         <Routes>
+            <Route
+               path="/"
+               element={<Form login={login} />}
+            />
+            <Route 
+               path="/home"
+               element={<Cards characters={characters} onClose={onClose} />}
+            />
+            <Route
+               path="/about"
+               element={<About />}
+            />
+            <Route
+               path="/detail/:id"
+               element={<Detail />}
+            />
+            <Route
+               path="*"
+               element={<NotFound />}
+            />
+         </Routes>
          <hr />
-         <Cards characters={characters} onClose={onClose} />
       </div>
    );
 }
