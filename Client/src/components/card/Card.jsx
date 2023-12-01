@@ -1,32 +1,35 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom"
-import { addFav } from "../../redux/actions";
+import styles from "./Card.module.css";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { addFav, removeFav } from "../../redux/actions";
 
 export default function Card(props) {
-   //* props = character
+   //* props = { id, name, status, ... } => character
 
-   const dispatch =useDispatch();
-   const [isFav, setIsFAv] = useState(false)
-   const handleFavorite = () =>{
+   const dispatch = useDispatch(); //* Function({type, payload})
+   const [isFav, setIsFav] = useState(false);
+   const handleFavorite = () => {
       if(isFav){
-         setIsFAv(false);
-         dispatch(removeFav(props.id))
+         setIsFav(false);
+         dispatch(removeFav(props.id));
       } else {
-         setIsFAv(true);
-         dispatch(addFav(props))
+         setIsFav(true);
+         dispatch(addFav(props));
       }
    }
 
+   const myFavorites = useSelector(state => state.myFavorites);
+   useEffect(() => {
+      myFavorites.forEach((fav) => {
+        if (fav.id === props.id) {
+          setIsFav(true);
+        }
+      });
+    }, [myFavorites]);
+
    return (
-      <div
-      style={{
-         backgroundColor: "grey",
-         margin: "20px",
-         padding: "20px",
-         borderRadius: "15px",
-      }}
-      >
+      <div className={styles.container}>
          {
             isFav ? (
                <button onClick={handleFavorite}>❤️</button>
@@ -34,16 +37,15 @@ export default function Card(props) {
                <button onClick={handleFavorite}>🤍</button>
             )
          }
-
          <button onClick={() => props.onClose(props.id)}>X</button>
-         <h2> {props.name} </h2>
+         <h2>{props.name}</h2>
          <h4>Id: {props.id}</h4>
-         <h4>Status: {props.status} </h4>
-         <h4>Species:  {props.species} </h4>
-         <h4>Gender: {props.gender} </h4>
-         <h4>Origin: {props.origin} </h4>
-         <Link to={`/detail/${props.id}`}>
-            <img src={props.image} alt= {props.name} /> 
+         <h4>Status: {props.status}</h4>
+         <h4>Specie: {props.species}</h4>
+         <h4>Gender: {props.gender}</h4>
+         <h4>Origin: {props.origin}</h4>
+         <Link to={`/detail/${props.id}`} >
+            <img src={props.image} alt={props.name} />
          </Link>
       </div>
    );

@@ -2,9 +2,12 @@ import './App.css';
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { removeFav } from './redux/actions.js';
 import About from './components/about/About.jsx';
 import Cards from './components/cards/Cards.jsx';
 import Detail from './components/detail/Detail.jsx';
+import Favorites from './components/favorites/Favorites.jsx';
 import Form from './components/form/Form.jsx';
 import Nav from './components/nav/Nav.jsx';
 import NotFound from './components/notfound/NotFound.jsx';
@@ -18,6 +21,7 @@ function App() {
 
    const navigate = useNavigate();
    const location = useLocation();
+   const dispatch = useDispatch();
 
    const [characters, setCharacters] = useState([]);
 
@@ -28,7 +32,9 @@ function App() {
       if(characterId.length) {
          return alert(`${characterId[0].name} ya existe!`)
       }
-      axios(`${URL}/${id}?key=${API_KEY}`).then(
+       // axios(`${URL}/${id}?key=${API_KEY}`)
+       axios(`http://localhost:3001/rickandmorty/character/${id}`)
+       .then(
          ({ data }) => {
             if (data.name) {
                setCharacters([...characters, data]);
@@ -38,8 +44,9 @@ function App() {
          });
          navigate("/home")
    }
-   const onClose = id => {
-      setCharacters(characters.filter(char => char.id !== Number(id)))
+   const onClose = (id) => {
+      setCharacters(characters.filter(char => char.id !== Number(id)));
+      dispatch(removeFav(id));
    }
 
    //* login
@@ -88,6 +95,9 @@ function App() {
                path="/detail/:id"
                element={<Detail />}
             />
+             <Route
+               path="/favorites"
+               element={<Favorites onClose={onClose} />} />
             <Route
                path="*"
                element={<NotFound />}
