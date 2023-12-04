@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styles from './SearchBar.module.css'
 
 export default function SearchBar(props) {
 
@@ -20,41 +20,22 @@ export default function SearchBar(props) {
 		const randomNumber = Math.floor(Math.random() * 826) + 1;
 		props.onSearch(randomNumber);
 	};
-
-   //* Etiquetas personalizadas con Styled Components
-   const Container = styled.div`
-      padding-top: 20px;
-      padding-bottom: 15px;
-      margin: auto;
-   `
-
-   const Input = styled.input`
-      border-radius: 5px;
-      height: 40px;
-   `
-
-   const MyButton = styled.button`
-      background-color: darkslategrey;
-      color: wheat;
-      &:hover {
-         color: darkslategrey;
-         background-color: darkolivegreen;
-      }
-   `
    
    return (
-      <Container>
-         <Input
+      <div className={styles.container}>
+         <input
             type="text"
             name="search"
             id="search"
+            className={styles.inputId}
             onChange={handleChange}
             value={id}
+            placeholder="Escriba el Id..."
          />
-         <MyButton onClick={handleClick}>Agregar</MyButton>
+         <button className={styles.buttonAgregar} onClick={handleClick}>Agregar</button>
          {/* Traer Character Random */}
-         <MyButton onClick={handleRandom}>Random</MyButton>
-         <hr />
-      </Container>
+         <button className={styles.buttonAgregar} onClick={handleRandom}>Random</button>
+        
+      </div>
    );
 }

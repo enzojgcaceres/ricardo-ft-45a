@@ -1,32 +1,38 @@
-const axios = require("axios");
-const URL = "https://rym2.up.railway.app/api/character";
-const API_KEY = "henrystaff";
+const axios = require("axios")
 
-const getCharById = (res, id) => {
-  axios.get(`${URL}/${id}?key=${API_KEY}`)
-    //* => retorna una PROMESA => pending
-    .then(response => response.data)
-    .then(data => {
-      //* { id, name, status, ... }
-      const character = {
-        id: data.id,
-        name: data.name,
-        gender: data.gender,
-        species: data.species,
-        origin: data.origin,
-        image: data.image,
-        status: data.status,
-        location: data.location
-      };
-      return res
-        .writeHead(200, { "Content-Type": "application/json" })
-        .end(JSON.stringify(character));
-    })
-    .catch(error => {
-      return res
-        .writeHead(500, { "Content-Type": "text/plain" })
-        .end(error.message)
-      })
+const getCharById = (req, res) => {
+    const { id } = req.params
+    axios
+        .get(`https://rickandmortyapi.com/api/character/${id}`)
+        .then((response) => {
+            const character = {
+                id: response.data.id,
+                name: response.data.name,
+                gender: response.data.gender,
+                species: response.data.species,
+                origin: response.data.origin, 
+                image: response.data.image,
+                status: response.data.status,
+                location: response.data.location
+            }
+            return character
+        })
+        .then((character) => {
+            if (character) {
+                return res.status(200).json(character)
+            } else {
+                res.status(404).send("Not Found")
+            }
+        })
+        .catch((error) => {
+            res.status(500).json({ message: error })
+        })
 }
 
-module.exports = getCharById;
+
+module.exports = {
+    getCharById
+}
+
+
+

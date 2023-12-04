@@ -12,13 +12,11 @@ import Form from './components/form/Form.jsx';
 import Nav from './components/nav/Nav.jsx';
 import NotFound from './components/notfound/NotFound.jsx';
 
-const URL = "https://rym2.up.railway.app/api/character";
-const API_KEY = "henrystaff"
-
+// const URL = "https://rym2.up.railway.app/api/character";
+// const API_KEY = "henrystaff";
 
 function App() {
-
-
+   
    const navigate = useNavigate();
    const location = useLocation();
    const dispatch = useDispatch();
@@ -32,45 +30,47 @@ function App() {
       if(characterId.length) {
          return alert(`${characterId[0].name} ya existe!`)
       }
-       // axios(`${URL}/${id}?key=${API_KEY}`)
-       axios(`http://localhost:3001/rickandmorty/character/${id}`)
-       .then(
-         ({ data }) => {
-            if (data.name) {
-               setCharacters([...characters, data]);
-            } else {
-               window.alert('¡El id debe ser un número entre 1 y 826!');
-            }
-         });
-         navigate("/home")
+      // axios(`${URL}/${id}?key=${API_KEY}`)
+      axios(`http://localhost:3001/rickandmorty/character/${id}`)
+         .then(
+            ({ data }) => {
+               if (data.name) {
+                  // console.log(data)
+                  setCharacters([...characters, data]);
+               } else {
+                  window.alert('¡El id debe ser un número entre 1 y 826!');
+               }
+            });
+      navigate("/home");
    }
+
    const onClose = (id) => {
       setCharacters(characters.filter(char => char.id !== Number(id)));
       dispatch(removeFav(id));
    }
 
-   //* login
+   //* Login
    const [access, setAccess] = useState(false);
    const EMAIL = 'ejemplo@gmail.com';
    const PASSWORD = '123456';
 
-   function login(userData){
-      if(userData.password === PASSWORD && userData.email === EMAIL){
+   function login(userData) {
+      if (userData.password === PASSWORD && userData.email === EMAIL) {
          setAccess(true);
          navigate('/home');
       } else {
-         alert("Credenciales incorrectas!")
+         alert("Credenciales incorrectas!");
       }
    }
 
-   function logout(){
-      setAccess(false)
+   function logout() {
+      setAccess(false);
    }
 
-   useEffect(()=>{
-      //!loggeo auto
-      !access && navigate ('/home');
-      //!access && navigate('/');
+   useEffect(() => {
+      //* Logueo automático
+      !access && navigate('/home');
+      // !access && navigate('/');
    }, [access]);
 
    return (
@@ -95,7 +95,7 @@ function App() {
                path="/detail/:id"
                element={<Detail />}
             />
-             <Route
+            <Route
                path="/favorites"
                element={<Favorites onClose={onClose} />} />
             <Route
@@ -103,7 +103,6 @@ function App() {
                element={<NotFound />}
             />
          </Routes>
-         <hr />
       </div>
    );
 }
