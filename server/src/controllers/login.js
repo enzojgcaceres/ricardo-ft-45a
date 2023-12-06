@@ -1,16 +1,15 @@
-const users = require("../utils/login")
+const users = require("../utils/users.js");
 
-const loginController = (req, res) => {
-    const { email, password } = req.query;
-    const userValid = users.find(
-        user => user.email === email && user.password === password
-    )
-    if (userValid) {
-        return res.status(200).json({ access: true })
-    }
-    res.status(200).json({ access: false })
-}
+module.exports = (req, res) => {
+  //* req.query = { email: "mail@.com", password:"1234" }
+  const { email, password } = req.query;
+  let access = false;
 
-module.exports = {
-    loginController
-} 
+  users.forEach((user) => {
+    if(user.email === email && user.password === password) access = true;
+    // console.log(typeof user.email)
+  });
+  // console.log(access);
+  //* users.some(callback);
+  return res.json({ access });
+};

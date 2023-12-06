@@ -2,7 +2,8 @@ import { ADD_FAV, FILTER, ORDER, REMOVE_FAV } from "./action-types";
 
 const initialState = {
   myFavorites: [],
-  allCharacters: []
+  allCharacters: [],
+  errors: {}
 }
 
 //* allCharacters = [ { Rick, M}, {Morty, M}, {Beth, F}, {Summer, F} ]
@@ -17,20 +18,14 @@ export default function reducer(state = initialState, { type, payload }) {
   switch(type) {
     case ADD_FAV: {
       return {
-        ...state,
-        allCharacters: [...state.allCharacters, payload],
-        myFavorites: [...state.allCharacters, payload]
+        ...state, myFavorites: payload, allCharacters: payload 
       }
     }
     case REMOVE_FAV: {
-      const filteredFavs = state.allCharacters.filter(
-        favorite => favorite.id !== Number(payload)
-      );
-      return {
-        ...state,
-        allCharacters: filteredFavs,
-        myFavorites: filteredFavs
-      }
+      // const filteredFavs = state.allCharacters.filter(
+      //   favorite => favorite.id !== Number(payload)
+      // );
+      return { ...state, myFavorites: payload, allCharacters: payload };
     }
     case FILTER:{
       //* { type: FILTER, payload: "FEMALE" }
@@ -56,6 +51,10 @@ export default function reducer(state = initialState, { type, payload }) {
         ...state,
         myFavorites: orderCopy
       }
+      //* case "ERROR":
+        //* Código
+        //* Cargar error en estado "errors"
+
     default:
       return { ...state }
   }
