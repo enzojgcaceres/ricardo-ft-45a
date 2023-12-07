@@ -84,7 +84,7 @@ function App() {
    return (
       <div className='App'>
          {
-            location.pathname !== "/" ? <Nav onSearch={onSearch} logout={logout} /> : null
+            location.pathname !== "/" && location.pathname !== "/About" ?  <Nav onSearch={onSearch} logout={logout} />  : null
          }
          <Routes>
             <Route
