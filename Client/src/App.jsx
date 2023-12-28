@@ -33,7 +33,7 @@ function App() {
 
          const { data } = await axios.get(`http://localhost:3001/rickandmorty/character/${id}`)
          if (data.name) {
-             console.log(data)
+            // console.log(data)
             setCharacters([...characters, data]);
             navigate("/home");
          } else {
