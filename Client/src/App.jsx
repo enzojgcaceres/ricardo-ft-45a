@@ -77,14 +77,14 @@ function App() {
 
    useEffect(() => {
       //* Logueo automático
-      !access && navigate('/home');
-      // !access && navigate('/');
+     !access && navigate('/home');
+     !access && navigate('/');
    }, [access]);
 
    return (
       <div className='App'>
          {
-            location.pathname !== "/" && location.pathname !== "/About" ? <Nav onSearch={onSearch} logout={logout} />  : null
+            location.pathname !== "/" && location.pathname !== "/about" ? <Nav onSearch={onSearch} logout={logout} />  : null
          }
          <Routes>
             <Route
