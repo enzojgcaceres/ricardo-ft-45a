@@ -43,7 +43,7 @@ export default function Card(props) {
          <h4>Status: {props.status}</h4>
          <h4>Specie: {props.species}</h4>
          <h4>Gender: {props.gender}</h4>
-         <h4>Origin: {props.origin}</h4>
+         <h4>Origin: <a href={props.originUrl}>{props.originName}</a></h4>
          <Link to={`/detail/${props.id}`} >
             <img src={props.image} alt={props.name} />
          </Link>

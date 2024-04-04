@@ -30,4 +30,4 @@ dist-ssr
 *.sw?
 
 # Archivos con información sensible
-.env
+*.env
