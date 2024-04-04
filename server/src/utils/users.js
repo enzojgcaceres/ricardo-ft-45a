@@ -1,5 +1,5 @@
  module.exports = [{
      email: "enzojgcaceres@gmail.com",
-     password: "richardandmortimer"
+     password: "rick22"
 }]
 

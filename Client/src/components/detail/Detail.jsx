@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import styles from "../detail/Detail.module.css"
 
 const URL = "https://rym2.up.railway.app/api/character";
 const API_KEY = "henrystaff";
@@ -13,7 +14,7 @@ export default function Detail(props) {
    useEffect(() => {
       // axios(`${URL}/${id}?key=${API_KEY}`)
       axios(`http://localhost:3001/rickandmorty/character/${id}`)
-         //* { timpo:x, status:x, data: { Rick } }
+         //* { tiempo:x, status:x, data: { Rick } }
          .then(
             ({ data }) => {
                if (data.name) {
@@ -28,7 +29,10 @@ export default function Detail(props) {
    }, [id]);
 
   return (
-     <div style={{backgroundColor:"darkslategray", padding: "20px", borderRadius:"20px"}} >
+     <div style={{backgroundColor:"darkslategray", 
+                   padding: "20px",
+                   borderRadius:"20px"
+                  }}>
         <h1>Detail</h1>
         <h2>{character.name}</h2>
         <img src={character.image} alt={character.name} />
